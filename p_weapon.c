@@ -461,7 +461,11 @@ static void Weapon_Generic2 (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FI
 void Weapon_Generic (edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, int FRAME_IDLE_LAST, int FRAME_DEACTIVATE_LAST, int *pause_frames, int *fire_frames, void (*fire)(edict_t *ent))
 {
 	int oldstate = ent->client->weaponstate;
-
+	if (ent->client->newweapon) 
+	{
+		ChangeWeapon(ent);
+		return;
+	}
 	Weapon_Generic2 (ent, FRAME_ACTIVATE_LAST, FRAME_FIRE_LAST, 
 		FRAME_IDLE_LAST, FRAME_DEACTIVATE_LAST, pause_frames, 
 		fire_frames, fire);
