@@ -325,44 +325,85 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 
 void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int effect, qboolean hyper)
 {
+	//js. if hyperblaster, shoot lasers that heal.  Consumes no ammo.
 	edict_t	*bolt;
 	trace_t	tr;
+	// gonna shoot a laser
+	vec3_t      from;
+	vec3_t      end;
 
 	VectorNormalize (dir);
 
-	bolt = G_Spawn();
-	VectorCopy (start, bolt->s.origin);
-	VectorCopy (start, bolt->s.old_origin);
-	vectoangles (dir, bolt->s.angles);
-	VectorScale (dir, speed, bolt->velocity);
-	bolt->movetype = MOVETYPE_FLYMISSILE;
-	bolt->clipmask = MASK_SHOT;
-	bolt->solid = SOLID_BBOX;
-	bolt->s.effects |= effect;
-	VectorClear (bolt->mins);
-	VectorClear (bolt->maxs);
-	bolt->s.modelindex = gi.modelindex ("models/objects/laser/tris.md2");
-	bolt->s.sound = gi.soundindex ("misc/lasfly.wav");
-	bolt->owner = self;
-	bolt->touch = blaster_touch;
-	bolt->nextthink = level.time + 2;
-	bolt->think = G_FreeEdict;
-	bolt->dmg = damage;
-	bolt->classname = "bolt";
-	if (hyper)
-		bolt->spawnflags = 1;
-	gi.linkentity (bolt);
-
-	if (self->client)
-		check_dodge (self, bolt->s.origin, dir, speed);
-
-	tr = gi.trace (self->s.origin, NULL, NULL, bolt->s.origin, bolt, MASK_SHOT);
-	if (tr.fraction < 1.0)
+	if(effect & EF_BLASTER)// if blaster, spawn blaster bolt
 	{
-		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
-		bolt->touch (bolt, tr.ent, NULL, NULL);
+		bolt = G_Spawn();
+		VectorCopy (start, bolt->s.origin);
+		VectorCopy (start, bolt->s.old_origin);
+		vectoangles (dir, bolt->s.angles);
+		VectorScale (dir, speed, bolt->velocity);
+		bolt->movetype = MOVETYPE_FLYMISSILE;
+		bolt->clipmask = MASK_SHOT;
+		bolt->solid = SOLID_BBOX;
+		bolt->s.effects |= effect;
+		VectorClear (bolt->mins);
+		VectorClear (bolt->maxs);
+		bolt->s.modelindex = gi.modelindex("models/objects/laser/tris.md2");
+		bolt->s.sound = gi.soundindex("misc/lasfly.wav");
+		bolt->owner = self;
+		bolt->touch = blaster_touch;
+		bolt->nextthink = level.time + 2;
+		bolt->think = G_FreeEdict;
+		bolt->dmg = damage;
+		bolt->classname = "bolt";
+      
+		gi.linkentity (bolt);
+      
+		if (self->client)
+			check_dodge (self, bolt->s.origin, dir, speed);
+      
+		tr = gi.trace (self->s.origin, NULL, NULL, bolt->s.origin, bolt, MASK_SHOT);
+		if (tr.fraction < 1.0)
+		{
+			VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
+			bolt->touch (bolt, tr.ent, NULL, NULL);
+		}
 	}
-}	
+	else // laser hyperblaster
+	{
+		// set origin of laser beam at gun barrel
+		VectorMA (start, 8192, dir, end);
+		VectorCopy (start, from);
+		// trace for end point of laser beam.
+		tr = gi.trace (from, NULL, NULL, end, self, MASK_SHOT);
+		if(OnSameTeam(self, tr.ent))
+		{
+			//  laser beam effect + double bubbles
+			//VectorCopy (tr.endpos, from);
+			gi.WriteByte (svc_temp_entity);
+			gi.WriteByte (TE_BFG_LASER);      
+			gi.WritePosition (start);
+			gi.WritePosition (tr.ent->s.origin);
+			gi.multicast (self->s.origin, MULTICAST_PHS);
+
+			gi.WriteByte (svc_temp_entity);
+			gi.WriteByte (TE_BUBBLETRAIL);      
+			gi.WritePosition (start);
+			gi.WritePosition (tr.ent->s.origin);
+			gi.multicast (self->s.origin, MULTICAST_PHS);
+
+			gi.WriteByte (svc_temp_entity);
+			gi.WriteByte (TE_BUBBLETRAIL);      
+			gi.WritePosition (start);
+			gi.WritePosition (tr.ent->s.origin);
+			gi.multicast (self->s.origin, MULTICAST_PHS);
+      
+			if ((tr.ent != self) && (tr.ent->health < (tr.ent->max_health + (tr.ent->max_health/2))))
+			{
+				tr.ent->health+=5;
+			}
+		}
+    }
+}       
 
 
 /*
