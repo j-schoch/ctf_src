@@ -26,7 +26,7 @@ void CheckClass(edict_t *ent)
 		return 2;
 	}*/
 }
-// Cmd_CLASS sets the ent->client->resp.udClass value
+// Cmd_Class sets the ent->client->resp.udClass value
 void Cmd_Class_f(edict_t *ent, char *cmd)
 {
 	gitem_t		*item;
