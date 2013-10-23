@@ -14,7 +14,7 @@ void CheckClass(edict_t *ent)
 {
 	if(ent->client->resp.udClass < 1)   //Do we already have a class?
 	{       //Nope... Send Message
-		gi.centerprintf(ent, "Please choose a class:\n\nG - Bomber\nM - Hero\n");
+		gi.centerprintf(ent, "Please choose a class:\n\nB - Bomber\nH - Hero\n");
 		//return NULL;
 	}
 	/*else if(ent->client->resp.udClass == 1)
