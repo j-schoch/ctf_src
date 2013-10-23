@@ -859,7 +859,7 @@ void Weapon_HyperBlaster (edict_t *ent)
 
 	Weapon_Generic (ent, 5, 20, 49, 53, pause_frames, fire_frames, Weapon_HyperBlaster_Fire);
 }
-
+//ls. Really nicely done. Cool how you modified the original purposes of the guns.
 //js. healblaster methods
 void HealBlaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
 {

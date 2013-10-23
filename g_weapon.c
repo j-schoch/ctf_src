@@ -387,6 +387,10 @@ void fire_healblaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int 
 			tr.ent->health+=5;
 		}
 
+		// ls. Maybe make the laserbeam not go to his origin, but a little higher.
+		// ls. Copy the vector and do something like target[2]-=30, to get his chest
+		// ls. or head.
+
 		//  laser beam effect + double bubbles
 		gi.WriteByte (svc_temp_entity);
 		gi.WriteByte (TE_BFG_LASER);      

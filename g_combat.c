@@ -361,6 +361,8 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	int			psave;
 	int			te_sparks;
 
+	// ls. Add a check to see that the type of damage comes from a rocket.
+	// ls. this will stop damage from BFG and grenades
 	if (!targ->takedamage)
 		return;
 	// js. negate self-rocket damage and boost knockback on self
