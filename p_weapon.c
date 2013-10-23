@@ -694,7 +694,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	float	damage_radius;
 	int		radius_damage;
 
-	damage = 100 + (int)(random() * 20.0);
+	damage = 100;//js. removed random damage:   + (int)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
 	if (is_quad)

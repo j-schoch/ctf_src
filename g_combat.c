@@ -363,6 +363,12 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 
 	if (!targ->takedamage)
 		return;
+	// js. negate self-rocket damage and boost knockback on self
+	if ((mod = MOD_R_SPLASH) && (targ == attacker))
+    {
+        damage = 0; // No Damage
+        knockback *= 1.2; // Rocket Jumping Jump Height * 1.2
+    }
 
 	// friendly fire avoidance
 	// if enabled you can't hurt teammates (but you can hurt yourself)
