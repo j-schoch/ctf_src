@@ -837,6 +837,12 @@ typedef struct
 	vec3_t		cmd_angles;			// angles sent over in the last command
 	int			game_helpchanged;
 	int			helpchanged;
+
+	//js. Class Definitions:
+	//1. Bomber - Takes no damage from rocket jumping
+	//2. Hero - Can heal teammates
+	//The flag that represents a player's ultiduo class
+	int         udClass;     
 } client_respawn_t;
 
 // this structure is cleared on each PutClientInServer(),

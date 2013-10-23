@@ -1,6 +1,6 @@
 #include "g_local.h"
 #include "m_player.h"
-
+#include "b_playerclass.h"
 
 char *ClientTeam (edict_t *ent)
 {
@@ -982,6 +982,12 @@ void ClientCommand (edict_t *ent)
 		Cmd_PutAway_f (ent);
 	else if (Q_stricmp (cmd, "wave") == 0)
 		Cmd_Wave_f (ent);
+	//js. choosing player class commands
+	else if (Q_stricmp (cmd, "bomber") == 0) 	//choose bomber
+		Cmd_Class_f (ent, cmd);			//call class choice function
+	else if (Q_stricmp (cmd, "hero") == 0)	//choose hero
+		Cmd_Class_f (ent, cmd);			//call class choice function
+
 //ZOID
 	else if (Q_stricmp (cmd, "team") == 0)
 	{

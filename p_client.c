@@ -1,5 +1,7 @@
 #include "g_local.h"
 #include "m_player.h"
+//js. function declarations
+#include "b_playerclass.h"
 
 void ClientUserinfoChanged (edict_t *ent, char *userinfo);
 
@@ -579,9 +581,7 @@ void InitClientPersistant (gclient_t *client)
 	item = FindItem("Blaster");
 	client->pers.selected_item = ITEM_INDEX(item);
 	client->pers.inventory[client->pers.selected_item] = 1;
-
 	client->pers.weapon = item;
-//ZOID
 	client->pers.lastweapon = item;
 //ZOID
 
@@ -590,12 +590,12 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.inventory[ITEM_INDEX(item)] = 1;
 //ZOID
 
-	client->pers.health			= 100;
-	client->pers.max_health		= 100;
+	client->pers.health			= 200;
+	client->pers.max_health		= 200;
 
 	client->pers.max_bullets	= 200;
 	client->pers.max_shells		= 100;
-	client->pers.max_rockets	= 50;
+	client->pers.max_rockets	= 100;
 	client->pers.max_grenades	= 50;
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
@@ -1016,6 +1016,7 @@ void PutClientInServer (edict_t *ent)
 	int		i;
 	client_persistant_t	saved;
 	client_respawn_t	resp;
+	gitem_t *item;
 
 	// find a spawn point
 	// do it before setting health back up, so farthest
@@ -1177,8 +1178,9 @@ void ClientBeginDeathmatch (edict_t *ent)
 	gi.WriteShort (ent-g_edicts);
 	gi.WriteByte (MZ_LOGIN);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
-
 	gi.bprintf (PRINT_HIGH, "%s entered the game\n", ent->client->pers.netname);
+
+	CheckClass(ent);  //js. Check to see if the user already has a class. If not message him
 
 	// make sure all view stuff is valid
 	ClientEndServerFrame (ent);
@@ -1460,6 +1462,8 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 			level.exitintermission = true;
 		return;
 	}
+
+	CheckClass(ent);  //Check to see if the user already has a class. If not message him
 
 	pm_passent = ent;
 
