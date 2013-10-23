@@ -14,7 +14,7 @@ void CheckClass(edict_t *ent)
 {
 	if(ent->client->resp.udClass < 1)   //Do we already have a class?
 	{       //Nope... Send Message
-		gi.centerprintf(ent, "Please choose a class:\n\nB - Bomber\nH - Hero\n");
+		gi.centerprintf(ent, "Please choose a class:\n\nB - Bomber - Offensive\nH - Hero - Supportive\n");
 		//return NULL;
 	}
 	/*else if(ent->client->resp.udClass == 1)
@@ -77,20 +77,22 @@ void Cmd_Class_f(edict_t *ent, char *cmd)
 		item = FindItem("Shells");
 		Add_Ammo(ent,item,99);
 
-		gi.centerprintf(ent,"You have chosen the Bomber class.\n\nGood Luck!\n");
+		gi.centerprintf(ent,"You have chosen the Bomber class.\nPrimary: RocketJumper - 1\nSecondary: Shotgun - 2\nGood Luck!\n");
 		
 	}
 	else if(Q_stricmp (cmd, "hero") == 0)
 	{
-		/*item = FindItem("HyperBlaster");
+		//js. vampire gun siphons health on hit
+		item = FindItem("Vampire");
 		ent->client->pers.selected_item = ITEM_INDEX(item);
 		ent->client->pers.inventory[ent->client->pers.selected_item] = 1;
 		ent->client->pers.weapon = item;
 		ent->client->pers.lastweapon = item;
 		ent->client->newweapon = ent->client->pers.weapon;
-		ChangeWeapon (ent);*/
+		ChangeWeapon (ent);
 
-		item = FindItem("HyperBlaster");
+		//js. modded to heal with lasers
+		item = FindItem("HealBlaster"); 
 		ent->client->pers.selected_item = ITEM_INDEX(item);
 		ent->client->pers.inventory[ent->client->pers.selected_item] = 1;
 		ent->client->pers.weapon = item;
@@ -101,7 +103,7 @@ void Cmd_Class_f(edict_t *ent, char *cmd)
 		item = FindItem("Cells");
 		Add_Ammo(ent,item,200);
 
-		gi.centerprintf(ent,"You have chosen the Hero class.\n\nGood Luck!\n");
+		gi.centerprintf(ent,"You have chosen the Hero class.\nPrimary: HealBlaster - 3\nSecondary: Vampire - 4\nGood Luck!\n");
 	}
 	else
 	{

@@ -11,6 +11,9 @@ void Weapon_SuperShotgun (edict_t *ent);
 void Weapon_Machinegun (edict_t *ent);
 void Weapon_Chaingun (edict_t *ent);
 void Weapon_HyperBlaster (edict_t *ent);
+//js. vampire weapon and healblaster
+void Weapon_Vampire (edict_t *ent);
+void Weapon_HealBlaster (edict_t *ent);
 void Weapon_RocketLauncher (edict_t *ent);
 void Weapon_Grenade (edict_t *ent);
 void Weapon_GrenadeLauncher (edict_t *ent);
@@ -1130,6 +1133,7 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	ent->think = droptofloor;
 	ent->s.effects = item->world_model_flags;
 	ent->s.renderfx = RF_GLOW;
+
 	if (ent->model)
 		gi.modelindex (ent->model);
 
@@ -1507,6 +1511,49 @@ always owned, never in the world
 		"models/weapons/v_hyperb/tris.md2",
 /* icon */		"w_hyperblaster",
 /* pickup */	"HyperBlaster",
+		0,
+		1,
+		"Cells",
+		IT_WEAPON|IT_STAY_COOP,
+		NULL,
+		0,
+/* precache */ "weapons/hyprbu1a.wav weapons/hyprbl1a.wav weapons/hyprbf1a.wav weapons/hyprbd1a.wav misc/lasfly.wav"
+	},
+
+	/*js. weapon_vampire (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"weapon_vampire", 
+		Pickup_Weapon,
+		Use_Weapon,
+		Drop_Weapon,
+		Weapon_Vampire,
+		"misc/w_pkup.wav",
+		"models/weapons/g_hyperb/tris.md2", EF_ROTATE,
+		"models/weapons/v_hyperb/tris.md2",
+/* icon */		"w_hyperblaster",
+/* pickup */	"Vampire",
+		0,
+		1,
+		"Cells",
+		IT_WEAPON|IT_STAY_COOP,
+		NULL,
+		0,
+/* precache */ "weapons/hyprbu1a.wav weapons/hyprbl1a.wav weapons/hyprbf1a.wav weapons/hyprbd1a.wav misc/lasfly.wav"
+	},
+	/*js. weapon_vampire (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"weapon_healblaster", 
+		Pickup_Weapon,
+		Use_Weapon,
+		Drop_Weapon,
+		Weapon_HealBlaster,
+		"misc/w_pkup.wav",
+		"models/weapons/g_hyperb/tris.md2", EF_ROTATE,
+		"models/weapons/v_hyperb/tris.md2",
+/* icon */		"w_hyperblaster",
+/* pickup */	"HealBlaster",
 		0,
 		1,
 		"Cells",
